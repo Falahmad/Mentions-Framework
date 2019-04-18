@@ -17,6 +17,7 @@
 		EE61AB5922676B9A00DDC5CB /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE61AB5822676B9A00DDC5CB /* Helpers.swift */; };
 		EE61AB5B22676BF900DDC5CB /* MentionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE61AB5A22676BF900DDC5CB /* MentionModel.swift */; };
 		EE61AB5D22676C1900DDC5CB /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE61AB5C22676C1900DDC5CB /* Config.swift */; };
+		EE90809C2268C04700800F02 /* ReadMe in Resources */ = {isa = PBXBuildFile; fileRef = EE90809B2268C04700800F02 /* ReadMe */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -43,6 +44,7 @@
 		EE61AB5822676B9A00DDC5CB /* Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helpers.swift; sourceTree = "<group>"; };
 		EE61AB5A22676BF900DDC5CB /* MentionModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MentionModel.swift; sourceTree = "<group>"; };
 		EE61AB5C22676C1900DDC5CB /* Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
+		EE90809B2268C04700800F02 /* ReadMe */ = {isa = PBXFileReference; lastKnownFileType = text; path = ReadMe; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -93,6 +95,7 @@
 				EE61AB5E22676D1300DDC5CB /* Views */,
 				EE61AB5122676B1000DDC5CB /* MentionsTableViewController.swift */,
 				EE61AB4F22676AD500DDC5CB /* MentionController.swift */,
+				EE90809B2268C04700800F02 /* ReadMe */,
 			);
 			path = MentionsFramework;
 			sourceTree = "<group>";
@@ -215,6 +218,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EE90809C2268C04700800F02 /* ReadMe in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

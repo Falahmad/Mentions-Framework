@@ -1,0 +1,7 @@
+
+// Usage
+
+
+ var mentionController: MentionController!
+
+mentionController = MentionController(superController: self, contentView: bottomView, textViewArea: answerTextField)
