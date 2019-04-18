@@ -115,20 +115,16 @@ class MentionController: NSObject
 }
 
 // MARK:- UITextViewDelegate
-
-extension MentionController: UITextViewDelegate
-{
+extension MentionController: UITextViewDelegate {
     
-    fileprivate func appendAnswerValue(text: String)
-    {
+    fileprivate func appendAnswerValue(text: String){
         let defaultAttributes: [NSAttributedString.Key: Any] = Config.mentionStringAttrubures(weight: .medium, size: 15)
         let attributesAnswer = NSMutableAttributedString(string: text, attributes: defaultAttributes)
         answer.append(attributesAnswer)
         textViewArea.attributedText = answer
     }
     
-    fileprivate func appendAnswerValue(text: String, range: NSRange)
-    {
+    fileprivate func appendAnswerValue(text: String, range: NSRange) {
         let defaultAttributes: [NSAttributedString.Key: Any] = Config.mentionStringAttrubures(weight: .medium, size: 15)
         let attributesAnswer = NSMutableAttributedString(string: text, attributes: defaultAttributes)
         
@@ -145,8 +141,7 @@ extension MentionController: UITextViewDelegate
         
     }
     
-    fileprivate func deleteAllCharacters()
-    {
+    fileprivate func deleteAllCharacters() {
         let defaultAttributes: [NSAttributedString.Key: Any] = Config.mentionStringAttrubures(weight: .medium, size: 15)
         let attributesAnswer = NSMutableAttributedString(string: "", attributes: defaultAttributes)
         answer = attributesAnswer
@@ -160,99 +155,76 @@ extension MentionController: UITextViewDelegate
         isAllSelected = false
     }
     
-    fileprivate func deleteCharacters(range: NSRange, mentionArrayIndex: Int)
-    {
+    fileprivate func deleteCharacters(range: NSRange, mentionArrayIndex: Int) {
         answer.deleteCharacters(in: range)
         textViewArea.selectedRange = range
         mentions.remove(at: mentionArrayIndex)
         appendAnswerValue(text: "")
         
-        for index in 0..<mentions.count
-        {
+        for index in 0..<mentions.count {
             let mention = mentions[index]
             let position = range.location
             
-            if position < mention.MentionIndex
-            {
+            if position < mention.MentionIndex {
                 decreaseIndex(mentionIndex: index, range: range)
             }
         }
     }
     
-    fileprivate func increaseIndex(mentionIndex: Int, range: NSRange)
-    {
+    fileprivate func increaseIndex(mentionIndex: Int, range: NSRange) {
         let length = range.length == 0 ? 1 : range.length
         mentions[mentionIndex].MentionIndex += length
         mentions[mentionIndex].endMentionIndex! += length
     }
     
-    fileprivate func decreaseIndex(mentionIndex: Int, range: NSRange)
-    {
+    fileprivate func decreaseIndex(mentionIndex: Int, range: NSRange) {
         mentions[mentionIndex].MentionIndex -= range.length
         mentions[mentionIndex].endMentionIndex! -= range.length
     }
     
-    func textViewDidBeginEditing(_ textView: UITextView)
-    {
-        if answer.string.isEmpty
-        {
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        if answer.string.isEmpty {
             appendAnswerValue(text: "")
         }
     }
     
-    func textViewDidEndEditing(_ textView: UITextView)
-    {
-        if answer.string.isEmpty
-        {
+    func textViewDidEndEditing(_ textView: UITextView) {
+        if answer.string.isEmpty {
             textViewArea.attributedText = Config.attributedString(text: "Type your answer", size: 13, weight: .medium, color: .lightGray)
         }
     }
     
-    func textViewDidChangeSelection(_ textView: UITextView)
-    {
-        if !answer.string.isEmpty
-        {
-            if textView.selectedTextRange?.start == textView.beginningOfDocument && textView.selectedTextRange?.end == textView.endOfDocument
-            {
+    func textViewDidChangeSelection(_ textView: UITextView) {
+        if !answer.string.isEmpty {
+            if textView.selectedTextRange?.start == textView.beginningOfDocument && textView.selectedTextRange?.end == textView.endOfDocument {
                 isAllSelected = true
-            }
-            else
-            {
+            } else {
                 isAllSelected = false
             }
-        }
-        else
-        {
+        } else {
             isAllSelected = false
         }
     }
     
-    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText string: String) -> Bool
-    {
-        
-        if isAllSelected
-        {
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText string: String) -> Bool {
+        if isAllSelected {
             deleteAllCharacters()
             return true
         }
         
-        if mentionKeyword == nil
-        {
+        if mentionKeyword == nil {
             mentionKeyword = ""
         }
         
-        for index in 0..<mentions.count
-        {
+        for index in 0..<mentions.count {
             let mention = mentions[index]
             let position = range.location
             
-            if position > mention.MentionIndex && position <= mention.endMentionIndex!
-            {
+            if position > mention.MentionIndex && position <= mention.endMentionIndex! {
                 let mentionRange = NSRange(location: mention.MentionIndex, length:  mention.lengthMention!+1)
                 deleteCharacters(range: mentionRange, mentionArrayIndex: index)
                 
-                if mentionViewStatus == .opened
-                {
+                if mentionViewStatus == .opened {
                     mentionTableViewController.emptyMentions()
                     mentionKeyword = nil
                     closeMentionTableView()
@@ -261,62 +233,43 @@ extension MentionController: UITextViewDelegate
             }
         }
         
-        if range.location == answer.length
-        {
-            if string == "@" && (answer.string.isEmpty || textView.attributedText.string.last == " ")
-            {
-                if mentionViewStatus == .closed
-                {
+        if range.location == answer.length {
+            if string == "@" && (answer.string.isEmpty || textView.attributedText.string.last == " ") {
+                if mentionViewStatus == .closed {
                     mentionTableViewController.searchForMention(keyword: mentionKeyword!)
                     openMentionTableView()
                     appendAnswerValue(text: string)
                     return false
-                }
-                else
-                {
+                } else {
                     return false
                 }
-            }
-            else
-            {
-                if mentionViewStatus == .opened
-                {
+            } else {
+                if mentionViewStatus == .opened {
                     mentionKeyword = "\(mentionKeyword!)\(string)"
                     mentionTableViewController.searchForMention(keyword: mentionKeyword!)
                 }
                 appendAnswerValue(text: string)
                 return false
             }
-        }
-        else
-        {
+        } else {
             let isBackSpace = strcmp(string, "\\b")//Check if the user is deleting
             
-            if (isBackSpace == -92)
-            {
+            if (isBackSpace == -92) {
                 let lastAlphabet = textView.attributedText?.string.last
                 
-                if lastAlphabet == "@" && mentionViewStatus == .opened//Close the mentions search menu
-                {
+                if lastAlphabet == "@" && mentionViewStatus == .opened { //Close the mentions search menu
                     mentionTableViewController.emptyMentions()
                     mentionKeyword = nil
                     closeMentionTableView()
-                }
-                else
-                {
-                    if mentionViewStatus == .opened
-                    {
+                } else {
+                    if mentionViewStatus == .opened {
                         mentionKeyword?.removeLast()
                         mentionTableViewController.searchForMention(keyword: mentionKeyword!)
-                    }
-                    else
-                    {
-                        for index in 0..<mentions.count
-                        {
+                    } else {
+                        for index in 0..<mentions.count {
                             let mention = mentions[index]
                             let position = range.location
-                            if position < mention.MentionIndex
-                            {
+                            if position < mention.MentionIndex {
                                 decreaseIndex(mentionIndex: index, range: range)
                             }
                         }
@@ -325,34 +278,24 @@ extension MentionController: UITextViewDelegate
                     }
                 }
                 return false
-            }
-            else if (string == "@" && textView.attributedText.string.last == " ")
-            {
-                if mentionViewStatus == .closed
-                {
+            } else if (string == "@" && textView.attributedText.string.last == " ") {
+                if mentionViewStatus == .closed {
                     mentionTableViewController.searchForMention(keyword: mentionKeyword!)
                     openMentionTableView()
                     appendAnswerValue(text: string)
                     return false
-                }
-                else
-                {
+                } else {
                     return false
                 }
-            }
-            else
-            {
-                for index in 0..<mentions.count
-                {
+            } else {
+                for index in 0..<mentions.count {
                     let mention = mentions[index]
                     let position = range.location
-                    if position < mention.MentionIndex
-                    {
+                    if position < mention.MentionIndex {
                         increaseIndex(mentionIndex: index, range: range)
                         appendAnswerValue(text: string, range: range)
                     }
                 }
-                
                 return true
             }
         }

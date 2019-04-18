@@ -27,8 +27,7 @@ class MentionsTableViewController: UITableViewController {
     }
     
     
-    func searchForMention(keyword:String)
-    {
+    func searchForMention(keyword:String) {
 //        let language = Localize.currentLanguage()
 //
 //        delegate.mentionSearching(isSearching: true)
@@ -46,14 +45,12 @@ class MentionsTableViewController: UITableViewController {
 //        }
     }
     
-    func emptyMentions()
-    {
+    func emptyMentions() {
         mentions = []
         tableView.reloadData()
     }
     
-    // MARK: - Table view data source
-    
+    // MARK: - UITableViewDelegate, UITableViewDataSource
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return UITableView.automaticDimension
     }
